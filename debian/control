@@ -1,0 +1,47 @@
+Source: txfixtures
+Maintainer: Debian Python Modules Team <python-modules-team@lists.alioth.debian.org>
+Uploaders: Free Ekanayaka <freee@debian.org>
+Section: python
+Priority: optional
+Build-Depends: dh-python,
+               debhelper (>= 9),
+               python-all (>= 2.6.6-3),
+               python-setuptools (>= 0.6b3),
+               python-fixtures,
+               python-testtools,
+               python-twisted-core,
+               python3-all,
+               python3-setuptools,
+               python3-fixtures,
+               python3-testtools,
+               python3-twisted,
+Standards-Version: 3.9.8
+Homepage: https://launchpad.net/txfixtures
+Vcs-Browser: https://anonscm.debian.org/cgit/python-modules/packages/txfixtures.git
+Vcs-Git: git://anonscm.debian.org/python-modules/packages/txfixtures.git
+
+Package: python-txfixtures
+Architecture: all
+Depends: ${misc:Depends}, ${python:Depends}
+Description: Twisted integration with Python test fixtures
+ The txfixtures package hooks into the Python testtools "test fixture"
+ interface, allowing you to write integration tests that rely on having
+ external Twisted service processes (or other types of service processes or
+ external resources in general) and possibly interact with them using
+ blocking APIs from test cases, that will run asynchronously in the
+ background.
+ .
+ This package provides the Python 2.x modules.
+
+Package: python3-txfixtures
+Architecture: all
+Depends: ${misc:Depends}, ${python3:Depends}
+Description: Twisted integration with Python test fixtures
+ The txfixtures package hooks into the Python testtools "test fixture"
+ interface, allowing you to write integration tests that rely on having
+ external Twisted service processes (or other types of service processes or
+ external resources in general) and possibly interact with them using
+ blocking APIs from test cases, that will run asynchronously in the
+ background.
+ .
+ This package provides the Python 3.x modules.
