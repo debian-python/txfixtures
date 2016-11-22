@@ -1,0 +1,14 @@
+********************************************
+Twisted integration with Python Testfixtures
+********************************************
+
+txfixtures hooks into the testtools 'test fixture' interface, so that you can
+write tests that rely on having an external Twisted daemon. ::
+
+    self.useFixture(LibrarianServerFixture)
+
+See 
+    https://launchpad.net/txfixtures
+    httsp://launchpad.net/testtools
+
+Licence: GPLv3
