@@ -8,7 +8,6 @@
 import errno
 import os
 import os.path
-import shutil
 from signal import (
     SIGKILL,
     SIGTERM,
@@ -21,7 +20,7 @@ def _kill_may_race(pid, signal_number):
     """Kill a pid accepting that it may not exist."""
     try:
         os.kill(pid, signal_number)
-    except OSError, e:
+    except OSError as e:
         if e.errno in (errno.ESRCH, errno.ECHILD):
             # Process has already been killed.
             return
@@ -34,7 +33,8 @@ def get_pid_from_file(pidfile_path):
     if not os.path.exists(pidfile_path):
         return None
     # Get the pid.
-    pid = open(pidfile_path, 'r').read().split()[0]
+    with open(pidfile_path, 'r') as fd:
+        pid = fd.read().split()[0]
     try:
         pid = int(pid)
     except ValueError:
@@ -63,7 +63,7 @@ def two_stage_kill(pid, poll_interval=0.1, num_polls=50):
             if new_pid:
                 return result
             time.sleep(poll_interval)
-        except OSError, e:
+        except OSError as e:
             if e.errno in (errno.ESRCH, errno.ECHILD):
                 # Raised if the process is gone by the time we try to get the
                 # return value.
@@ -71,7 +71,6 @@ def two_stage_kill(pid, poll_interval=0.1, num_polls=50):
 
     # The process is still around, so terminate it violently.
     _kill_may_race(pid, SIGKILL)
-
 
 
 def kill_by_pidfile(pidfile_path, poll_interval=0.1, num_polls=50):
@@ -92,7 +91,7 @@ def remove_if_exists(path):
     """Remove the given file if it exists."""
     try:
         os.remove(path)
-    except OSError, e:
+    except OSError as e:
         if e.errno != errno.ENOENT:
             raise
 
@@ -111,11 +110,11 @@ def until_no_eintr(retries, function, *args, **kwargs):
     for i in range(retries):
         try:
             return function(*args, **kwargs)
-        except (IOError, OSError), e:
+        except (IOError, OSError) as e:
             if e.errno == errno.EINTR:
                 continue
             raise
-        except socket.error, e:
+        except socket.error as e:
             # In Python 2.6 we can use IOError instead.  It also has
             # reason.errno but we might be using 2.5 here so use the
             # index hack.
@@ -124,5 +123,3 @@ def until_no_eintr(retries, function, *args, **kwargs):
             raise
     else:
         raise
-
-

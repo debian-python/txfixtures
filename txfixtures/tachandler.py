@@ -21,6 +21,7 @@ import warnings
 
 from fixtures import Fixture
 
+from testtools.content import content_from_file
 from txfixtures.osutils import (
     get_pid_from_file,
     kill_by_pidfile,
@@ -38,18 +39,21 @@ class TacTestFixture(Fixture):
 
     You must override setUpRoot to set up a root directory for the daemon.
 
-    You may override _hasDaemonStarted, typically by calling _isPortListening, to 
-    tell how long to wait before the daemon is available.
+    You may override _hasDaemonStarted, typically by calling _isPortListening,
+    to tell how long to wait before the daemon is available.
     """
 
-    def setUp(self, spew=False, umask=None, python_path=None, twistd_script=None):
+    _proc = None
+
+    def setUp(self, spew=False, umask=None,
+              python_path=None, twistd_script=None):
         """Initialize a new TacTestFixture fixture.
 
         :param python_path: If set, run twistd under this Python interpreter.
-        :param twistd_script: If set, run this twistd script rather than the 
+        :param twistd_script: If set, run this twistd script rather than the
             system default.  Must be provided if python_path is given.
         """
-        Fixture.setUp(self)
+        super(TacTestFixture, self).setUp()
         if get_pid_from_file(self.pidfile):
             # An attempt to run while there was an existing live helper
             # was made. Note that this races with helpers which use unique
@@ -79,7 +83,7 @@ class TacTestFixture(Fixture):
             python_path = sys.executable
         if twistd_script is None:
             twistd_script = '/usr/bin/twistd'
-        args = [python_path, 
+        args = [python_path,
             '-Wignore::DeprecationWarning',
             twistd_script,
             '-o', '-y', self.tacfile, '--pidfile', self.pidfile,
@@ -96,22 +100,23 @@ class TacTestFixture(Fixture):
 
         # Run twistd, and raise an error if the return value is non-zero or
         # stdout/stderr are written to.
-        proc = subprocess.Popen(
+        self._proc = subprocess.Popen(
             args,
             stdout=subprocess.PIPE,
             stderr=subprocess.STDOUT,
             )
         self.addCleanup(self.killTac)
-        stdout = until_no_eintr(10, proc.stdout.read)
+        stdout = until_no_eintr(10, self._proc.stdout.read)
         if stdout:
             raise TacException('Error running %s: unclean stdout/err: %s'
                                % (args, stdout))
-        rv = proc.wait()
+        rv = self._proc.wait()
         # twistd will normally fork off into the background with the
         # originally-spawned process exiting 0.
         if rv != 0:
             raise TacException('Error %d running %s' % (rv, args))
 
+        self.addDetail(self.logfile, content_from_file(self.logfile))
         self._waitForDaemonStartup()
 
     def _hasDaemonStarted(self):
@@ -132,7 +137,7 @@ class TacTestFixture(Fixture):
             s.connect((host, port))
             s.close()
             return True
-        except socket.error, e:
+        except socket.error as e:
             if e.errno == errno.ECONNREFUSED:
                 return False
             else:
@@ -155,8 +160,7 @@ class TacTestFixture(Fixture):
             now = time.time()
 
         if now >= deadline:
-            raise TacException('Unable to start %s. Content of %s:\n%s' % (
-                self.tacfile, self.logfile, open(self.logfile).read()))
+            raise TacException('Unable to start %s.' % self.tacfile)
 
     def tearDown(self):
         # For compatibility - migrate to cleanUp.
@@ -166,6 +170,9 @@ class TacTestFixture(Fixture):
         """Kill the TAC file if it is running."""
         pidfile = self.pidfile
         kill_by_pidfile(pidfile)
+        if self._proc:
+            # Close the pipe
+            self._proc.stdout.close()
 
     def sendSignal(self, sig):
         """Send the given signal to the tac process."""
@@ -202,18 +209,3 @@ class TacTestFixture(Fixture):
     @property
     def daemon_port(self):
         raise NotImplementedError
-
-def get_pid_from_file(pidfile_path):
-    """Retrieve the PID from the given file, if it exists, None otherwise."""
-    if not os.path.exists(pidfile_path):
-        return None
-    # Get the pid.
-    pid = open(pidfile_path, 'r').read().split()[0]
-    try:
-        pid = int(pid)
-    except ValueError:
-        # pidfile contains rubbish
-        return None
-    return pid
-
-
