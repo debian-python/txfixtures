@@ -1,3 +1,9 @@
+txfixtures (0.2.1-1) unstable; urgency=medium
+
+  * New upstream release
+
+ -- Free Ekanayaka <freee@debian.org>  Tue, 20 Dec 2016 14:39:50 +0000
+
 txfixtures (0.1.4-1) unstable; urgency=low
 
   * Initial release (Closes: #845305)
