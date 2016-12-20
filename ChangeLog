@@ -1,0 +1,46 @@
+CHANGES
+=======
+
+0.2.0
+-----
+
+* Add MongoDB fixture
+* Add Phantomjs fixture
+* Add Service fixture (#3)
+
+0.1.5
+-----
+
+* Add travis and tox configuration
+* Switch to PBR
+* [r=cjwatson] Add basic sphinx documentation
+* [r=allenap] Attach the log using addDetail() instead of as an exception message
+* [r=bigjools] Remove spurious copy of get_pid_from_file() from txfixtures.tachandler
+* Use super() to call up
+* Attach the log using addDetail() instead of as an exception message
+* Update ignores
+* Fix lint
+* Remove get_pid_from_file() from tachandler.py
+
+0.1.4
+-----
+
+* Release 0.1.4
+* twistd can't be invoked as a module; explain some more failure cases
+
+0.1.3
+-----
+
+* Add more pypi metadata
+* Don't use PYTHONWARNINGS which only exists in python>=2.7
+* rm dead code
+* Don't use relative imports, so we can cope with Python2.4
+* Rename TacTestSetup to TacTestFixture
+
+0.1.1
+-----
+
+* Declare Python dependencies
+* Fix Trove licence classification
+* Add distutils setup.py
+* txfixtures split out from lp and all tests are passing
