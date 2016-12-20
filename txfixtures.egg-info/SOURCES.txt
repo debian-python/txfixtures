@@ -1,7 +1,6 @@
-.mailmap
-.travis.yml
 AUTHORS
 ChangeLog
+MANIFEST.in
 Makefile
 README.rst
 requirements.txt

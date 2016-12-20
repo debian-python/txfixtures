@@ -1,9 +1,10 @@
 CHANGES
 =======
 
-0.2.0
+0.2.1
 -----
 
+* Exclude .travis.yml from release files
 * Add MongoDB fixture
 * Add Phantomjs fixture
 * Add Service fixture (#3)
