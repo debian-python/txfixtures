@@ -10,7 +10,7 @@ testtools releases.
  2 files changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/tests/test_service.py b/tests/test_service.py
-index 25d0617..3b466c0 100644
+index 141070b..24cbcdd 100644
 --- a/tests/test_service.py
 +++ b/tests/test_service.py
 @@ -3,7 +3,7 @@ import signal
