@@ -1,6 +1,6 @@
 Metadata-Version: 1.1
 Name: txfixtures
-Version: 0.2.2
+Version: 0.2.3
 Summary: Treat Twisted applications as Python test fixtures
 Home-page: https://launchpad.net/txfixtures
 Author: Martin Pool

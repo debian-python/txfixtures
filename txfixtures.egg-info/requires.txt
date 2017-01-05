@@ -16,4 +16,4 @@ selenium
 [test]
 coverage
 retrying
-systemfixtures
+systemfixtures>=0.6.2
