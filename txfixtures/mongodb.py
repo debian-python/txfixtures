@@ -12,7 +12,7 @@ FORMAT = (
 class MongoDB(Service):
     """Start and stop a `mongodb` process in the background. """
 
-    def __init__(self, mongod="mongod", args=(), **kwargs):
+    def __init__(self, mongod=b"mongod", args=(), **kwargs):
         command = [mongod] + list(args)
         super(MongoDB, self).__init__(command, **kwargs)
 
@@ -42,6 +42,6 @@ class MongoDB(Service):
     @property
     def _args(self):
         return self.command[:] + [
-            "--port=%d" % self.port,
-            "--dbpath=%s" % self._dbPath.path,
+            b"--port=%d" % self.port,
+            b"--dbpath=%s" % self._dbPath.path.encode("utf-8"),
         ]

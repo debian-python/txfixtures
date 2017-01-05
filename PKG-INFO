@@ -1,6 +1,6 @@
 Metadata-Version: 1.1
 Name: txfixtures
-Version: 0.2.1
+Version: 0.2.2
 Summary: Treat Twisted applications as Python test fixtures
 Home-page: https://launchpad.net/txfixtures
 Author: Martin Pool
@@ -11,6 +11,8 @@ Description: Twisted integration with Python Testfixtures
         
         txfixtures hooks into the testtools 'test fixture' interface, so that you can
         write tests that rely on having an external Twisted daemon.
+        
+        Documentation: http://txfixtures.readthedocs.io/
         
         See:
         

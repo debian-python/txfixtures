@@ -48,11 +48,11 @@ class MongoDBTest(TestCase):
 
         self.fixture.setUp()
         executable, arg1, arg2 = self.reactor.process.args
-        self.assertEqual("mongod", executable)
-        self.assertEqual("--port=666", arg1)
+        self.assertEqual(b"mongod", executable)
+        self.assertEqual(b"--port=666", arg1)
         self.assertEqual(["mongodb://localhost:666"], client)
-        self.assertThat(arg2, StartsWith("--dbpath="))
-        self.assertThat(arg2.split("=")[1], DirExists())
+        self.assertThat(arg2, StartsWith(b"--dbpath="))
+        self.assertThat(arg2.split(b"=")[1], DirExists())
         self.assertIn(
             "waiting for connections on port 666",
             self.logger.output.split("\n"))

@@ -1,6 +1,12 @@
 CHANGES
 =======
 
+0.2.2
+-----
+
+* In Python 3, pass mongodb arguments as bytes not unicode
+* Add link to documentation in README (#3)
+
 0.2.1
 -----
 
