@@ -10,7 +10,7 @@ from testtools.matchers import (
     IsInstance,
     MatchesStructure,
 )
-from testtools.twistedsupport import (
+from txfixtures._testtools import (
     succeeded,
     failed,
     has_no_result,

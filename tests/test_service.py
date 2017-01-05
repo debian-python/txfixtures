@@ -3,7 +3,7 @@ import signal
 import socket
 
 from testtools import TestCase
-from testtools.twistedsupport import AsynchronousDeferredRunTest
+from testtools.deferredruntest import AsynchronousDeferredRunTest
 
 from fixtures import (
     FakeLogger,
