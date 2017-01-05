@@ -71,7 +71,7 @@ class ServiceIntegrationTest(TestCase):
         If the given command doesn't terminate with SIGTERM, it's SIGKILL'ed.
         """
         self.script.hang()
-        self.fixture.protocol.timeout = 0.2
+        self.fixture.protocol.timeout = 1.0
         self.fixture.expectOutput("hanging")
         self.fixture.setUp()
         self.fixture.cleanUp()
