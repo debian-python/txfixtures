@@ -1,0 +1,37 @@
+From: Free Ekanayaka <freee@debian.org>
+Date: Thu, 5 Jan 2017 10:22:07 +0000
+Subject: fix-tests-depending-on-newer-testtools
+
+Fix the tests that depend on testtools.twistedsupport from newer
+testtools releases.
+---
+ tests/test_service.py            | 2 +-
+ txfixtures/tests/test_service.py | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/tests/test_service.py b/tests/test_service.py
+index 25d0617..3b466c0 100644
+--- a/tests/test_service.py
++++ b/tests/test_service.py
+@@ -3,7 +3,7 @@ import signal
+ import socket
+ 
+ from testtools import TestCase
+-from testtools.twistedsupport import AsynchronousDeferredRunTest
++from testtools.deferredruntest import AsynchronousDeferredRunTest
+ 
+ from fixtures import (
+     FakeLogger,
+diff --git a/txfixtures/tests/test_service.py b/txfixtures/tests/test_service.py
+index 919fd78..0b33b67 100644
+--- a/txfixtures/tests/test_service.py
++++ b/txfixtures/tests/test_service.py
+@@ -10,7 +10,7 @@ from testtools.matchers import (
+     IsInstance,
+     MatchesStructure,
+ )
+-from testtools.twistedsupport import (
++from txfixtures._testtools import (
+     succeeded,
+     failed,
+     has_no_result,
