@@ -1,6 +1,11 @@
 CHANGES
 =======
 
+0.2.3
+-----
+
+* Fix flaky ServiceIntegrationTest.test_hung test
+
 0.2.2
 -----
 

@@ -71,6 +71,7 @@ class ServiceIntegrationTest(TestCase):
         """
         self.script.hang()
         self.fixture.protocol.timeout = 0.2
+        self.fixture.expectOutput("hanging")
         self.fixture.setUp()
         self.fixture.cleanUp()
         self.assertIn(
