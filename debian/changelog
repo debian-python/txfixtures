@@ -1,8 +1,11 @@
-txfixtures (0.2.2-1) unstable; urgency=medium
+txfixtures (0.2.3-1) unstable; urgency=medium
 
-  * New upstream release
+  * New upstream version 0.2.3
+  * Build-depend on mongodb and selenium
+  * Export PBR_VERSION to avoid tests failing
+  * Build-Depend on procps
 
- -- Free Ekanayaka <freee@debian.org>  Tue, 20 Dec 2016 14:39:50 +0000
+ -- Free Ekanayaka <freee@debian.org>  Thu, 05 Jan 2017 23:36:50 +0000
 
 txfixtures (0.1.4-1) unstable; urgency=low
 

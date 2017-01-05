@@ -1,0 +1,22 @@
+From: Free Ekanayaka <freee@debian.org>
+Date: Thu, 5 Jan 2017 21:01:16 +0000
+Subject: increase-mongodb-integration-test-timeout
+
+MongoDB can take a while to start.
+---
+ tests/test_mongodb.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/tests/test_mongodb.py b/tests/test_mongodb.py
+index adb13e1..53a0143 100644
+--- a/tests/test_mongodb.py
++++ b/tests/test_mongodb.py
+@@ -12,7 +12,7 @@ class MongoDBIntegrationTest(TestCase):
+         super(MongoDBIntegrationTest, self).setUp()
+         self.logger = self.useFixture(FakeLogger())
+         self.useFixture(Reactor())
+-        self.mongodb = MongoDB(timeout=5)
++        self.mongodb = MongoDB(timeout=25)
+ 
+     def test_client(self):
+         """
