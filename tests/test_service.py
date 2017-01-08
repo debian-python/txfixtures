@@ -61,7 +61,7 @@ class ServiceIntegrationTest(TestCase):
         with open(executable, "w") as fd:
             fd.write("")
         self.fixture.command = [executable.encode("utf-8")]
-        self.fixture.minUptime = 0.5
+        self.fixture.protocol.minUptime = 2.5
         error = self.assertRaises(MultipleExceptions, self.fixture.setUp)
         self.assertIsInstance(error.args[0][1], ProcessTerminated)
 
