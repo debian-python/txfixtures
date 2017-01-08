@@ -47,12 +47,13 @@ class MongoDBTest(TestCase):
         self.patch(pymongo, "MongoClient", FakeMongoClient)
 
         self.fixture.setUp()
-        executable, arg1, arg2 = self.reactor.process.args
+        executable, arg1, arg2, arg3 = self.reactor.process.args
         self.assertEqual(b"mongod", executable)
         self.assertEqual(b"--port=666", arg1)
         self.assertEqual(["mongodb://localhost:666"], client)
         self.assertThat(arg2, StartsWith(b"--dbpath="))
         self.assertThat(arg2.split(b"=")[1], DirExists())
+        self.assertEqual(b"--nojournal", arg3)
         self.assertIn(
             "waiting for connections on port 666",
             self.logger.output.split("\n"))

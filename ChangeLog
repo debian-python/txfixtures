@@ -1,6 +1,17 @@
 CHANGES
 =======
 
+0.2.5
+-----
+
+* Disable journaling in MongoDB
+* Use the default 15 seconds timeout in MongoDB tests
+
+0.2.4
+-----
+
+* Set minUptime correctly in ServiceIntegrationTest.test_non_executable_command
+
 0.2.3
 -----
 

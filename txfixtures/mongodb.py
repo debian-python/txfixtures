@@ -44,4 +44,5 @@ class MongoDB(Service):
         return self.command[:] + [
             b"--port=%d" % self.port,
             b"--dbpath=%s" % self._dbPath.path.encode("utf-8"),
+            b"--nojournal",
         ]

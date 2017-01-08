@@ -12,7 +12,7 @@ class MongoDBIntegrationTest(TestCase):
         super(MongoDBIntegrationTest, self).setUp()
         self.logger = self.useFixture(FakeLogger())
         self.useFixture(Reactor())
-        self.mongodb = MongoDB(timeout=5)
+        self.mongodb = MongoDB()
 
     def test_client(self):
         """
