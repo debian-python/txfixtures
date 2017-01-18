@@ -1,6 +1,11 @@
 CHANGES
 =======
 
+0.2.6
+-----
+
+* Fix test_no_expected_port_timeout failing if port 9999 is used
+
 0.2.5
 -----
 

@@ -211,7 +211,13 @@ class ServiceProtocolIntegrationTest(TestCase):
         deferred doesn't fire.
         """
         self.script.sleep(1)
-        self.protocol.expectedPort = 9999
+
+        # Find an unused port
+        sock = socket.socket()
+        sock.bind(("localhost", 0))
+        self.addCleanup(sock.close)
+        _, self.protocol.expectedPort = sock.getsockname()
+
         self.protocol.ready.addTimeout(0.2, reactor)
         self.process = reactor.spawnProcess(self.protocol, self.script.path)
         try:
