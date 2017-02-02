@@ -2,7 +2,7 @@ PYTHON ?= python
 COVERAGE ?= $(PYTHON)-coverage
 
 SOURCE = txfixtures
-OMIT = $(SOURCE)/osutils.py,$(SOURCE)/tachandler.py
+OMIT = $(SOURCE)/osutils.py,$(SOURCE)/tachandler.py,$(SOURCE)/_twisted/backports/*.py
 
 check:
 	rm -f .coverage
