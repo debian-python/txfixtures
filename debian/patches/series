@@ -1,4 +1,3 @@
 0001-backport-testtools-twistedsupport.patch
 0002-fix-tests-depending-on-newer-testtools.patch
-0003-skip-phantomjs-tests.patch
 0005-fix-flaky-service-hung-test.patch
