@@ -1,3 +1,9 @@
+txfixtures (0.2.7-1) unstable; urgency=medium
+
+  * New upstream version 0.2.7
+
+ -- Free Ekanayaka <freee@debian.org>  Thu, 02 Feb 2017 09:18:49 +0000
+
 txfixtures (0.2.6-1) unstable; urgency=medium
 
   * New upstream version 0.2.6
