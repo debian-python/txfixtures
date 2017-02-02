@@ -1,4 +1,4 @@
-from unittest import skipIf
+from unittest import skip
 
 from testtools import TestCase
 
@@ -28,7 +28,7 @@ class PhantomJSIntegrationTest(TestCase):
 
         self.fixture = PhantomJS(timeout=5)
 
-    @skipIf(not hasTwist, "twist executable not available")
+    @skip("Debian's phantomjs can't run headless")
     def test_webdriver(self):
         """After setUp is run, the service is fully ready."""
         self.useFixture(self.fixture)
