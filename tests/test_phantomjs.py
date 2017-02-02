@@ -1,10 +1,16 @@
+from unittest import skipIf
+
 from testtools import TestCase
 
 from fixtures import FakeLogger
 
+from twisted import version as twistedVersion
+
 from txfixtures.reactor import Reactor
 from txfixtures.service import Service
 from txfixtures.phantomjs import PhantomJS
+
+hasTwist = (twistedVersion.major, twistedVersion.minor) >= (16, 5)
 
 
 class PhantomJSIntegrationTest(TestCase):
@@ -22,6 +28,7 @@ class PhantomJSIntegrationTest(TestCase):
 
         self.fixture = PhantomJS(timeout=5)
 
+    @skipIf(not hasTwist, "twist executable not available")
     def test_webdriver(self):
         """After setUp is run, the service is fully ready."""
         self.useFixture(self.fixture)

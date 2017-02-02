@@ -23,6 +23,7 @@ from twisted.internet.error import (
     ProcessDone,
 )
 
+from txfixtures._twisted.backports.defer import addTimeout
 from txfixtures.reactor import Reactor
 from txfixtures.service import (
     Service,
@@ -193,7 +194,7 @@ class ServiceProtocolIntegrationTest(TestCase):
         """
         self.script.sleep(1)
         self.protocol.expectedOutput = "hello"
-        self.protocol.ready.addTimeout(0.2, reactor)
+        addTimeout(self.protocol.ready, 0.2, reactor)
         self.process = reactor.spawnProcess(self.protocol, self.script.path)
         try:
             yield self.protocol.ready
@@ -218,7 +219,7 @@ class ServiceProtocolIntegrationTest(TestCase):
         self.addCleanup(sock.close)
         _, self.protocol.expectedPort = sock.getsockname()
 
-        self.protocol.ready.addTimeout(0.2, reactor)
+        addTimeout(self.protocol.ready, 0.2, reactor)
         self.process = reactor.spawnProcess(self.protocol, self.script.path)
         try:
             yield self.protocol.ready

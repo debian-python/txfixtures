@@ -30,6 +30,7 @@ from twisted.internet.error import (
 from twisted.protocols.basic import LineOnlyReceiver
 
 from txfixtures._twisted.threading import interruptableCallFromThread
+from txfixtures._twisted.backports.defer import addTimeout
 
 
 TIMEOUT = 15
@@ -231,7 +232,9 @@ class ServiceProtocol(ProcessProtocol):
 
         logging.info("Service process spawned")
 
-        self.ready.addTimeout(self.timeout, self.reactor)
+        # XXX Replace with self.ready.addTimeout once support for Twisted<16.5
+        #     gets dropped.
+        addTimeout(self.ready, self.timeout, self.reactor)
 
         # The twisted.protocols.basic.LineOnlyReceiver class expects to know
         # when the transport is disconnecting.

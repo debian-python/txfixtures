@@ -7,6 +7,8 @@ from twisted.internet.error import ProcessTerminated
 from twisted.internet._baseprocess import BaseProcess
 from twisted.python.failure import Failure
 
+from txfixtures._twisted.backports.testing import MemoryReactorClock
+
 EXPECTED_SIGNALS = (signal.SIGTERM, signal.SIGTERM)
 
 

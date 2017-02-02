@@ -1,4 +1,4 @@
-"""Extensions to stock Twisted code."""
+"""Extensions to Twisted's stock threading code."""
 
 from six.moves.queue import (
     Queue,

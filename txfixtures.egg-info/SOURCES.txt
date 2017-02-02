@@ -39,6 +39,9 @@ txfixtures.egg-info/top_level.txt
 txfixtures/_twisted/__init__.py
 txfixtures/_twisted/testing.py
 txfixtures/_twisted/threading.py
+txfixtures/_twisted/backports/__init__.py
+txfixtures/_twisted/backports/defer.py
+txfixtures/_twisted/backports/testing.py
 txfixtures/_twisted/tests/__init__.py
 txfixtures/_twisted/tests/test_threading.py
 txfixtures/tests/__init__.py
