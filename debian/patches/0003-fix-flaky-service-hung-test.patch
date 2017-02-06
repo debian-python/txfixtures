@@ -1,5 +1,5 @@
 From: Free Ekanayaka <freee@debian.org>
-Date: Thu, 5 Jan 2017 23:42:16 +0000
+Date: Mon, 6 Feb 2017 12:09:25 +0000
 Subject: fix-flaky-service-hung-test
 
 Increase the timeout used to detect if service process is
@@ -9,14 +9,14 @@ hung.
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/tests/test_service.py b/tests/test_service.py
-index 24cbcdd..97a871c 100644
+index 852d406..a2dc652 100644
 --- a/tests/test_service.py
 +++ b/tests/test_service.py
-@@ -70,7 +70,7 @@ class ServiceIntegrationTest(TestCase):
+@@ -73,7 +73,7 @@ class ServiceIntegrationTest(TestCase):
          If the given command doesn't terminate with SIGTERM, it's SIGKILL'ed.
          """
          self.script.hang()
--        self.fixture.protocol.timeout = 0.2
+-        self.fixture.protocol.timeout = 0.5
 +        self.fixture.protocol.timeout = 1.0
          self.fixture.expectOutput("hanging")
          self.fixture.setUp()
