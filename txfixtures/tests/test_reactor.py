@@ -18,7 +18,7 @@ class ReactorTest(TestCase):
         super(ReactorTest, self).setUp()
         self.logger = self.useFixture(FakeLogger())
         self.reactor = ThreadedMemoryReactorClock()
-        self.fixture = Reactor(reactor=self.reactor, timeout=0)
+        self.fixture = Reactor(self.reactor, timeout=0)
         self.threads = self.useFixture(FakeThreads())
 
     def test_install_sigchld_waker(self):

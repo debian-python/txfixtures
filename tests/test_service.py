@@ -36,9 +36,10 @@ class ServiceIntegrationTest(TestCase):
     def setUp(self):
         super(ServiceIntegrationTest, self).setUp()
         self.logger = self.useFixture(FakeLogger())
-        self.useFixture(Reactor())
         self.script = self.useFixture(FakeExecutable())
-        self.fixture = Service([self.script.path.encode("utf-8")], timeout=1)
+        reactor = self.useFixture(Reactor())
+        command = self.script.path.encode("utf-8")
+        self.fixture = Service(reactor, command)
 
     def test_service_ready(self):
         """After setUp is run, the service is fully ready."""
@@ -51,17 +52,18 @@ class ServiceIntegrationTest(TestCase):
 
     def test_unknown_command(self):
         """If an unknown command is given, setUp raises an error."""
-        self.fixture.command = [b"/foobar"]
+        self.fixture.command = b"/foobar"
+        self.fixture.protocol.minUptime = 2.5
         error = self.assertRaises(MultipleExceptions, self.fixture.setUp)
         self.assertIsInstance(error.args[0][1], ProcessTerminated)
         self.assertIn("No such file or directory", self.logger.output)
 
     def test_non_executable_command(self):
         """If the given command is not executable, setUp raises an error."""
-        executable = self.useFixture(TempDir()).join("foobar")
-        with open(executable, "w") as fd:
+        path = self.useFixture(TempDir()).join("foobar")
+        with open(path, "w") as fd:
             fd.write("")
-        self.fixture.command = [executable.encode("utf-8")]
+        self.fixture.command = path.encode("utf-8")
         self.fixture.protocol.minUptime = 2.5
         error = self.assertRaises(MultipleExceptions, self.fixture.setUp)
         self.assertIsInstance(error.args[0][1], ProcessTerminated)
@@ -71,7 +73,7 @@ class ServiceIntegrationTest(TestCase):
         If the given command doesn't terminate with SIGTERM, it's SIGKILL'ed.
         """
         self.script.hang()
-        self.fixture.protocol.timeout = 0.2
+        self.fixture.protocol.timeout = 0.5
         self.fixture.expectOutput("hanging")
         self.fixture.setUp()
         self.fixture.cleanUp()
@@ -87,7 +89,7 @@ class ServiceProtocolIntegrationTest(TestCase):
     def setUp(self):
         super(ServiceProtocolIntegrationTest, self).setUp()
         self.logger = self.useFixture(FakeLogger())
-        self.protocol = ServiceProtocol()
+        self.protocol = ServiceProtocol(reactor)
         self.process = None
         self.script = self.useFixture(FakeExecutable())
 

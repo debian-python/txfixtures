@@ -7,8 +7,8 @@ from six.moves.queue import Queue
 
 from fixtures import Fixture
 
-from twisted.internet import reactor as defaultTwistedReactor
 from twisted.internet.posixbase import _SIGCHLDWaker
+from twisted.internet.epollreactor import EPollReactor
 
 from txfixtures._twisted.threading import (
     CallFromThreadTimeout,
@@ -36,7 +36,7 @@ class Reactor(Fixture):
         :ivar thread: The `~threading.Thread` that the reactor runs in.
         """
         super(Reactor, self).__init__()
-        self.reactor = reactor or defaultTwistedReactor
+        self.reactor = reactor or EPollReactor()
         self.timeout = timeout
         self.thread = None
 
@@ -107,6 +107,7 @@ class Reactor(Fixture):
         # reactor thread as it's not thread-safe. The SIGCHLD waker will
         # react to SIGCHLD signals by writing to a dummy pipe, which will
         # wake up epoll() calls.
+        self.reactor._childWaker = _SIGCHLDWaker(self.reactor)
         self.call(1, self._addSIGCHLDWaker)
 
         # Install the actual signal hander (this needs to happen in the main
@@ -171,7 +172,6 @@ class Reactor(Fixture):
 
     def _addSIGCHLDWaker(self):
         """Add a `_SIGNCHLDWaker` to wake up the reactor when a child exits."""
-        self.reactor._childWaker = _SIGCHLDWaker(self.reactor)
         self.reactor._internalReaders.add(self.reactor._childWaker)
         self.reactor.addReader(self.reactor._childWaker)
 

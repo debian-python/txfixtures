@@ -13,7 +13,7 @@ class CallFromThreadTimeout(Exception):
     """Raised when interruptableCallFromThread times out."""
 
 
-def interruptableCallFromThread(reactor, timeout, f, *a, **kw):
+def interruptableCallFromThread(_reactor, timeout, f, *a, **kw):
     """An interruptable version of Twisted's blockingCallFromThread.
 
     This function has all arguments and semantics of the original one, plus
@@ -25,7 +25,7 @@ def interruptableCallFromThread(reactor, timeout, f, *a, **kw):
     def _callFromThread(queue, f):
         result = maybeDeferred(f, *a, **kw)
         result.addBoth(queue.put)
-    reactor.callFromThread(_callFromThread, queue, f)
+    _reactor.callFromThread(_callFromThread, queue, f)
     try:
         result = queue.get(timeout=timeout)
     except Empty:

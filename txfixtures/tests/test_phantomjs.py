@@ -11,7 +11,7 @@ from selenium.webdriver.remote import webdriver
 from fixtures import FakeLogger
 
 from txfixtures._twisted.testing import ThreadedMemoryReactorClock
-
+from txfixtures.reactor import Reactor
 from txfixtures.phantomjs import PhantomJS
 
 OUT = (
@@ -27,7 +27,7 @@ class PhantomJSTest(TestCase):
         super(PhantomJSTest, self).setUp()
         self.logger = self.useFixture(FakeLogger())
         self.reactor = ThreadedMemoryReactorClock()
-        self.fixture = PhantomJS(reactor=self.reactor)
+        self.fixture = PhantomJS(Reactor(self.reactor))
 
     def test_setup(self):
         """
@@ -46,7 +46,7 @@ class PhantomJSTest(TestCase):
 
         self.fixture.setUp()
         executable, arg1, arg2 = self.reactor.process.args
-        self.assertEqual("phantomjs", executable)
+        self.assertEqual(b"phantomjs", executable)
         self.assertEqual("--webdriver=666", arg1)
         self.assertThat(arg2, StartsWith("--cookies-file="))
         self.assertThat(os.path.dirname(arg2.split("=")[1]), DirExists())

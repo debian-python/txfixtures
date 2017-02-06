@@ -21,7 +21,7 @@ class InterruptableCallFromThreadTest(TestCase):
 
     def setUp(self):
         super(InterruptableCallFromThreadTest, self).setUp()
-        self.useFixture(Reactor())
+        self.useFixture(Reactor(reactor))
 
     def test_success(self):
         """

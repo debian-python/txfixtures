@@ -9,7 +9,7 @@ from testtools.matchers import (
 from fixtures import FakeLogger
 
 from txfixtures._twisted.testing import ThreadedMemoryReactorClock
-
+from txfixtures.reactor import Reactor
 from txfixtures.mongodb import MongoDB
 
 OUT = (
@@ -25,7 +25,7 @@ class MongoDBTest(TestCase):
         super(MongoDBTest, self).setUp()
         self.logger = self.useFixture(FakeLogger())
         self.reactor = ThreadedMemoryReactorClock()
-        self.fixture = MongoDB(reactor=self.reactor)
+        self.fixture = MongoDB(Reactor(self.reactor))
 
     def test_setup(self):
         """
