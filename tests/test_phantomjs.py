@@ -18,15 +18,15 @@ class PhantomJSIntegrationTest(TestCase):
     def setUp(self):
         super(PhantomJSIntegrationTest, self).setUp()
         self.logger = self.useFixture(FakeLogger())
-        self.useFixture(Reactor())
+        reactor = self.useFixture(Reactor())
 
         # Setup a local web server to test the WebDriver
-        server = Service(["twist", "web"], timeout=5)
+        server = Service(reactor, "twist", args=["web"], timeout=5)
         server.expectOutput("Starting reactor...")
         server.expectPort(8080)
         self.useFixture(server)
 
-        self.fixture = PhantomJS(timeout=5)
+        self.fixture = PhantomJS(reactor, timeout=10)
 
     @skipIf(not hasTwist, "twist executable not available")
     def test_webdriver(self):

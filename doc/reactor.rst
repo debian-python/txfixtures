@@ -21,6 +21,7 @@ The typical use case is integration testing.
 
 .. doctest::
 
+
    >>> from testtools import TestCase
 
    >>> from twisted.internet import reactor
@@ -33,7 +34,7 @@ The typical use case is integration testing.
    ...
    ...     def setUp(self):
    ...         super().setUp()
-   ...         self.useFixture(Reactor())
+   ...         self.fixture = self.useFixture(Reactor(reactor=reactor))
    ...
    ...     def test_uptime(self):
    ...         out = blockingCallFromThread(reactor, getProcessOutput, b"uptime")

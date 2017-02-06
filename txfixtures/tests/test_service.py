@@ -42,6 +42,7 @@ from txfixtures._twisted.testing import (
     MemoryProcess,
 )
 
+from txfixtures.reactor import Reactor
 from txfixtures.service import (
     Service,
     ServiceProtocol,
@@ -55,7 +56,7 @@ class ServiceTest(TestCase):
         super(ServiceTest, self).setUp()
         self.logger = self.useFixture(FakeLogger())
         self.reactor = ThreadedMemoryReactorClock()
-        self.fixture = Service(["foo"], reactor=self.reactor)
+        self.fixture = Service(Reactor(self.reactor), "foo")
 
     def test_setup_start_process(self):
         """
@@ -153,7 +154,7 @@ class ServiceProtocolTest(TestCase):
         self.logger = self.useFixture(FakeLogger())
         self.reactor = MemoryReactorClock()
         self.process = MemoryProcess()
-        self.protocol = ServiceProtocol(reactor=self.reactor)
+        self.protocol = ServiceProtocol(self.reactor)
         self.process.proto = self.protocol
 
     def test_fork(self):
@@ -175,10 +176,10 @@ class ServiceProtocolTest(TestCase):
         'ready' Deferred gets fired.
         """
         self.protocol.makeConnection(self.process)
-        self.reactor.advance(0.1)
+        self.reactor.advance(0.2)
         self.assertThat(self.protocol.ready, succeeded(Is(None)))
         self.assertIn(
-            "Service process alive for 0.1 seconds", self.logger.output)
+            "Service process alive for 0.2 seconds", self.logger.output)
 
     def test_expected_output(self):
         """
@@ -360,7 +361,8 @@ class ServiceOutputParserTest(TestCase):
         self.transport = StringTransport()
         self.handler = BufferingHandler(2)
         self.useFixture(LogHandler(self.handler))
-        self.parser = ServiceOutputParser("my-app")
+        self.parser = ServiceOutputParser()
+        self.parser.setServiceName("my-app")
         self.parser.makeConnection(self.transport)
 
     def test_full_match(self):

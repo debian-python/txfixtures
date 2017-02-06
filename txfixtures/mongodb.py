@@ -1,9 +1,11 @@
 import pymongo
 
-from fixtures import TempDir
+from txfixtures.service import (
+    TIMEOUT,
+    Service
+)
 
-from txfixtures.service import Service
-
+COMMAND = b"mongod"
 FORMAT = (
     "{Y}-{m}-{d}T{H}:{M}:{S}\.{msecs}\+0000 {levelname} "
     "[A-Z]+ +\[{name}\] {message}")
@@ -12,9 +14,10 @@ FORMAT = (
 class MongoDB(Service):
     """Start and stop a `mongodb` process in the background. """
 
-    def __init__(self, mongod=b"mongod", args=(), **kwargs):
-        command = [mongod] + list(args)
-        super(MongoDB, self).__init__(command, **kwargs)
+    def __init__(self, reactor, command=COMMAND, args=None, env=None,
+                 timeout=None):
+        super(MongoDB, self).__init__(
+            reactor, command=command, args=args, env=env, timeout=timeout)
 
         self.expectOutput("waiting for connections on port")
         self.setOutputFormat(FORMAT)
@@ -30,7 +33,7 @@ class MongoDB(Service):
 
     def _setUp(self):
         self.expectPort(self.allocatePort())
-        self._dbPath = self.useFixture(TempDir())
+        self.addDataDir()
         super(MongoDB, self)._setUp()
         uri = "mongodb://localhost:%d" % self.port
         self.client = pymongo.MongoClient(uri, **self.clientKwargs)
@@ -39,10 +42,9 @@ class MongoDB(Service):
         # XXX Workaround pymongo leaving threads around.
         self.addCleanup(pymongo.periodic_executor._shutdown_executors)
 
-    @property
-    def _args(self):
-        return self.command[:] + [
+    def _extraArgs(self):
+        return [
             b"--port=%d" % self.port,
-            b"--dbpath=%s" % self._dbPath.path.encode("utf-8"),
+            b"--dbpath=%s" % self._data_dirs[0].encode("utf-8"),
             b"--nojournal",
         ]

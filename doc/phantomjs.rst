@@ -12,21 +12,22 @@ Selenium_-based assertions:
    >>> from testtools import TestCase
    >>> from txfixtures import Reactor, Service, PhantomJS
 
-   >>> TWIST_COMMAND = "twistd -n web".split(" ")
+   >>> TWISTD = "twistd"
+   >>> TWISTD_ARGS = "-n web".split(" ")
 
    >>> class HTTPServerTest(TestCase):
    ...
    ...     def setUp(self):
    ...         super().setUp()
    ...         self.logger = self.useFixture(FakeLogger())
-   ...         self.useFixture(Reactor())
+   ...         reactor = self.useFixture(Reactor())
    ...
    ...         # Create a sample web server
-   ...         self.service = Service(TWIST_COMMAND)
+   ...         self.service = Service(reactor, TWISTD, args=TWISTD_ARGS)
    ...         self.service.expectPort(8080)
    ...         self.useFixture(self.service)
    ...
-   ...         self.phantomjs = self.useFixture(PhantomJS())
+   ...         self.phantomjs = self.useFixture(PhantomJS(reactor))
    ...
    ...     def test_home_page(self):
    ...         self.phantomjs.webdriver.get("http://localhost:8080")

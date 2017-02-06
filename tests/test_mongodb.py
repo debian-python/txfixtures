@@ -11,8 +11,8 @@ class MongoDBIntegrationTest(TestCase):
     def setUp(self):
         super(MongoDBIntegrationTest, self).setUp()
         self.logger = self.useFixture(FakeLogger())
-        self.useFixture(Reactor())
-        self.mongodb = MongoDB()
+        reactor = self.useFixture(Reactor())
+        self.mongodb = MongoDB(reactor)
 
     def test_client(self):
         """
