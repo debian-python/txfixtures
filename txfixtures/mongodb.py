@@ -1,9 +1,6 @@
 import pymongo
 
-from txfixtures.service import (
-    TIMEOUT,
-    Service
-)
+from txfixtures.service import Service
 
 COMMAND = b"mongod"
 FORMAT = (
@@ -40,7 +37,8 @@ class MongoDB(Service):
         self.addCleanup(self.client.close)
 
         # XXX Workaround pymongo leaving threads around.
-        self.addCleanup(pymongo.periodic_executor._shutdown_executors)
+        if int(pymongo.version.split(".")[0]) >= 3:
+            self.addCleanup(pymongo.periodic_executor._shutdown_executors)
 
     def _extraArgs(self):
         return [
